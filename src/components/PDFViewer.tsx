@@ -2,18 +2,22 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { generateSpeech } from '@/services/murfService';
 import type { TextItem } from 'pdfjs-dist/types/src/display/api';
 
-// Initialize PDF.js worker correctly
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry?url';
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+// Initialize PDF.js worker
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface PDFViewerProps {
   file: File | null;
 }
+
+// Fix 2: Proper type for animation frame reference
+type AnimationFrameRef = number | null;
 
 export const PDFViewer = ({ file }: PDFViewerProps) => {
   const [numPages, setNumPages] = useState<number | 0>(0);
@@ -27,7 +31,7 @@ export const PDFViewer = ({ file }: PDFViewerProps) => {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<AnimationFrameRef>(null);
   const words = useRef<string[]>([]);
   const currentWordIndex = useRef(0);
 
@@ -35,10 +39,13 @@ export const PDFViewer = ({ file }: PDFViewerProps) => {
   const extractFullText = useCallback(async (url: string) => {
     const controller = new AbortController();
     try {
-      const pdf = await pdfjs.getDocument({ 
-        url,
-        signal: controller.signal 
-      }).promise;
+      const loadingTask = pdfjs.getDocument(url);
+      if (controller) {
+        loadingTask.onPassword = () => {
+          controller.abort();
+        };
+      }
+      const pdf = await loadingTask.promise;
       
       let text = '';
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
