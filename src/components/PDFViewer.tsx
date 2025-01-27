@@ -7,7 +7,8 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import { generateSpeech } from '@/services/murfService';
 
 // Initialize PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = '/public/pdf.worker.js';
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry?url';
+pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface PDFViewerProps {
   file: File | null;
@@ -74,15 +75,21 @@ export const PDFViewer = ({ file }: PDFViewerProps) => {
   const extractTextFromPage = async () => {
     try {
       if (!fileUrl) return null;
-
+  
       const pdf = await pdfjs.getDocument(fileUrl).promise;
       const page = await pdf.getPage(pageNumber);
       const textContent = await page.getTextContent();
       const text = textContent.items.map((item: any) => item.str).join(' ');
+  
+      if (!text || !text.trim()) {
+        throw new Error('No readable text found on this page');
+      }
+  
       return text;
     } catch (error) {
       console.error('Error extracting text:', error);
-      throw new Error('Failed to extract text from PDF');
+      setError('Failed to extract text from PDF. Please ensure the file is valid.');
+      return null;
     }
   };
 
@@ -90,14 +97,14 @@ export const PDFViewer = ({ file }: PDFViewerProps) => {
     try {
       if (!currentText || currentWordIndex === 0) {
         const text = await extractTextFromPage();
-        if (!text || !text.trim()) {
+        if (!text) {
           alert('No readable text found on this page');
           return;
         }
         setCurrentText(text);
         const wordArray = text.split(/\s+/);
         setWords(wordArray);
-      }
+      }  
 
       const remainingText = words.slice(currentWordIndex).join(' ');
 
@@ -174,7 +181,7 @@ export const PDFViewer = ({ file }: PDFViewerProps) => {
       alert('Error generating speech. Please try again.');
     }
   };
-
+  
   const pauseReading = () => {
     if (useMurfAPI) {
       if (audioRef.current && !audioRef.current.paused) {
