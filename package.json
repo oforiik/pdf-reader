@@ -4,28 +4,29 @@
   "private": true,
   "scripts": {
     "dev": "node server.js",
-    "build": "vite build && cp node_modules/pdfjs-dist/build/pdf.worker.js dist/",
+    "build": "next build && cp node_modules/pdfjs-dist/build/pdf.worker.* .next/static/",
     "start": "NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.1",
     "axios": "^1.7.9",
-    "next": "^15.1.6",
-    "pdfjs-dist": "^4.2.67",     
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "next": "^14.0.3",
+    "pdfjs-dist": "^4.2.67",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-pdf": "^7.7.3"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/pdfjs-dist": "^4.2.67",  
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/pdfjs-dist": "^2.10.377",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.20",
-    "eslint": "^8",
-    "eslint-config-next": "^15.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.3",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5"
+    "typescript": "^5.3.3"
   }
 }
