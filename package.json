@@ -11,14 +11,14 @@
   "dependencies": {
     "axios": "^1.7.9",
     "next": "^15.1.6",
-    "pdfjs-dist": "^4.0.379",
+    "pdfjs-dist": "^4.2.67",     
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-pdf": "^7.7.3"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/pdfjs-dist": "^2.10.377",
+    "@types/pdfjs-dist": "^4.2.67",  
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.20",
