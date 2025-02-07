@@ -12,16 +12,7 @@ import {
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { generateSpeech as murfGenerateSpeech, mockGenerateSpeech } from '@/services/murfService';
-import type { TextItem } from 'pdfjs-dist/types/src/display/api';
-
-declare module 'pdfjs-dist' {
-  interface TextItem {
-    str: string;
-    dir: string;
-    transform: number[];
-    fontName: string;
-  }
-}
+import type { TextItem } from 'pdfjs-dist/types/src/display/api.js';
 
 // Updated worker configuration
 pdfjs.GlobalWorkerOptions.workerSrc = '/_next/static/pdf.worker.min.js';

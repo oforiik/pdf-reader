@@ -6,17 +6,7 @@ module.exports = {
     };
     return config;
   },
-  async headers() {
-    return [
-      {
-        source: '/_next/static/pdf.worker.min.js',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/javascript',
-          },
-        ],
-      },
-    ];
+  experimental: {
+    serverComponentsExternalPackages: ['pdfjs-dist']
   }
 };
