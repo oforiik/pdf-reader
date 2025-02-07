@@ -4,18 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "node server.js",
-    "build": "next build && cp node_modules/pdfjs-dist/build/pdf.worker.* .next/static/",
+    "build": "next build && cp node_modules/pdfjs-dist/build/pdf.worker.min.js public/_next/static/",
     "start": "NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
-    "@heroicons/react": "^2.1.1",
+    "@heroicons/react": "^2.2.0",
     "axios": "^1.7.9",
+    "canvas": "^2.11.2",
     "next": "^14.0.3",
     "pdfjs-dist": "^4.2.67",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-pdf": "^7.7.3"
+    "react-pdf": "^9.2.1"
   },
   "devDependencies": {
     "@types/node": "^20",
